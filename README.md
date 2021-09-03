@@ -1,2 +1,2 @@
-# bellabeat-data-analysis
+# Bllabeat Data Analysis
 Google Data Analytics Capstone Project
