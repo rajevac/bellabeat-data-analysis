@@ -9,4 +9,19 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Background
+Bellabeat, the manufacturer of wearable smart devices for women, believes analyzing how people are using their products may help unlock growth opportunities for the company.
 
+Conducting the analysis will require looking into how consumers use non-Bellabeat wearable smart devices data and apply those insights to Bellabeat products.
+
+### Objectives
+* Identify trends in smart device usage and see how those trends might be applied to Bellabeat devices.
+* Make recommendations, if any, that can be valuable in helping Bellabeat marketing strategy
+
+### Data analysis process
+* Ask
+* Prepare
+* Process
+* Analize
+* Share
+* Act
