@@ -12,16 +12,28 @@ knitr::opts_chunk$set(echo = TRUE)
 # Background
 Bellabeat, the manufacturer of wearable smart devices for women, believes analyzing how people are using their products may help unlock growth opportunities for the company.
 
-Conducting the analysis will require looking into how consumers use non-Bellabeat wearable smart devices data and apply those insights to Bellabeat products.
+Conducting the analysis will require looking into data how consumers use non-Bellabeat wearable smart devices and apply those insights to Bellabeat products.
 
 ### Objectives
 * Identify trends in smart device usage and see how those trends might be applied to Bellabeat devices.
 * Make recommendations, if any, that can be valuable in helping Bellabeat marketing strategy
 
 ### Data analysis process
+This project is using the following data analysis steps: 
+
 * Ask
 * Prepare
 * Process
 * Analize
 * Share
 * Act
+
+# Ask
+This section identifies the primary stakeholder and the business question/problem this data analysis will try to answer/offer a solution.
+
+### Stakeholders
+* **Urška Sršen**: Bellabeat’s cofounder and Chief Creative Officer
+* **Sando Mur**: Mathematician and Bellabeat’s cofounder; key member of the Bellabeat executive team
+
+### Business Task
+Gain an understanding of how people use Fitbit smart devices and apply gained insights on one of the Bellabeat devices to make recommendations that may help craft Bellabeat marketing strategy.
