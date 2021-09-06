@@ -287,3 +287,323 @@ head(df_minutes_sleeps_wide_merged)
 It is not clear what was the criteria when collecting [FitBit Fitness Tracker Data](https://www.kaggle.com/arashnic/fitbit), how 33 observations are selected, and is the sample true representation of the population. One important thing to note is that Bellabeat customers are all female, and the FitBit data set doesn't make a distinction between male and female.
 
 # Process
+
+### Cleaning: dailyActivity_merged.csv
+
+##### Check for data types #####
+```{r}
+df_daily_activity_merged <- read_csv('raw-data/dailyActivity_merged.csv')
+str(df_daily_activity_merged )
+```
+
+Convert ActivityDate from character to date data type
+```{r}
+df_daily_activity_merged$ActivityDate <- as.Date(df_daily_activity_merged$ActivityDate, "%m/%d/%Y")
+str(df_daily_activity_merged )
+```
+
+##### Remove duplicate rows from df_daily_activity_merged #####
+Check for number of rows.
+```{r}
+nrow(df_daily_activity_merged)
+```
+Remove duplicate rows, if any, and check for number of rows.
+```{r}
+df_daily_activity_merged <- distinct(df_daily_activity_merged)
+nrow(df_daily_activity_merged)
+```
+Check for missing values
+```{r}
+colSums(is.na(df_daily_activity_merged))
+```
+
+Save cleaned data
+```{r}
+write.csv(df_daily_activity_merged,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_daily_activity_clean.csv', row.names = TRUE)
+```
+
+### Cleaning: sleepDay_merged.csv
+
+##### Check for data types #####
+```{r}
+df_sleep_day_merged <- read_csv('raw-data/sleepDay_merged.csv')
+str(df_sleep_day_merged)
+```
+Convert SleepDay from character to date data type
+```{r}
+df_sleep_day_merged$SleepDay <- as.Date(df_sleep_day_merged$SleepDay, "%m/%d/%Y")
+str(df_sleep_day_merged)
+```
+
+##### Remove duplicate rows from sleepDay_merged.csv #####
+Check for number of rows.
+```{r}
+nrow(df_sleep_day_merged)
+```
+Remove duplicate rows, if any, and check for number of rows.
+```{r}
+df_sleep_day_merged <- distinct(df_sleep_day_merged)
+nrow(df_sleep_day_merged)
+```
+Check for missing values
+```{r}
+colSums(is.na(df_sleep_day_merged))
+```
+
+Save cleaned data
+```{r}
+write.csv(df_sleep_day_merged,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_sleep_day_clean.csv', row.names = TRUE)
+```
+
+### Cleaning: weightLogInfo_merged.csv
+
+##### Check for data types #####
+```{r}
+df_weight_merged <- read_csv('raw-data/weightLogInfo_merged.csv')
+str(df_weight_merged)
+```
+Convert SleepDay from character to date data type
+```{r}
+df_weight_merged$Date <- as.Date(df_weight_merged$Date, "%m/%d/%Y")
+str(df_weight_merged)
+```
+
+##### Remove duplicate rows from weightLogInfo_merged.csv #####
+Check for number of rows.
+```{r}
+nrow(df_weight_merged)
+```
+Remove duplicate rows, if any, and check for number of rows.
+```{r}
+df_weight_merged <- distinct(df_weight_merged)
+nrow(df_weight_merged)
+```
+Check for missing values
+```{r}
+colSums(is.na(df_weight_merged))
+```
+Since there are 65 of 67 Fat variables with no value, we should drop this column.
+```{r}
+df_weight_merged <- select(df_weight_merged,-c(Fat))
+colnames(df_weight_merged)
+```
+
+Save cleaned data
+```{r}
+write.csv(df_weight_merged,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_weight_clean.csv', row.names = TRUE)
+```
+
+### Cleaning: hourlyCalories_merged.csv
+
+##### Check for data types #####
+```{r}
+df_hourly_calories_merged <- read_csv('raw-data/hourlyCalories_merged.csv')
+str(df_hourly_calories_merged)
+```
+
+Convert ActivityHour from character to date and time data type
+```{r}
+
+df_hourly_calories_merged$ActivityHour <- as.POSIXct(df_hourly_calories_merged$ActivityHour, 
+                                                     format = "%m/%d/%Y %I:%M:%S %p")
+
+str(df_hourly_calories_merged)
+```
+```{r}
+head(df_hourly_calories_merged$ActivityHour, 24)
+```
+
+
+##### Remove duplicate rows from hourlyCalories_merged.csv #####
+Check for number of rows.
+```{r}
+nrow(df_hourly_calories_merged)
+```
+Remove duplicate rows, if any, and check for number of rows.
+```{r}
+df_hourly_calories_merged <- distinct(df_hourly_calories_merged)
+nrow(df_hourly_calories_merged)
+```
+Check for missing values
+```{r}
+colSums(is.na(df_hourly_calories_merged))
+```
+
+Save cleaned data
+```{r}
+write.csv(df_hourly_calories_merged,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_hourly_calories_clean.csv', row.names = TRUE)
+```
+
+
+### Cleaning: hourlyIntensities_merged.csv
+
+##### Check for data types #####
+```{r}
+df_hourly_intensities_merged <- read_csv('raw-data/hourlyIntensities_merged.csv')
+str(df_hourly_calories_merged)
+```
+```{r}
+head(df_hourly_intensities_merged$ActivityHour, 24)
+```
+
+
+Convert ActivityHour from character to date and time data type
+```{r}
+
+df_hourly_intensities_merged$ActivityHour <- as.POSIXct(df_hourly_intensities_merged$ActivityHour, 
+                                                     format = "%m/%d/%Y %I:%M:%S %p")
+
+str(df_hourly_intensities_merged)
+```
+```{r}
+head(df_hourly_intensities_merged$ActivityHour, 24)
+```
+
+
+##### Remove duplicate rows from hourlyIntensities_merged.csv #####
+Check for number of rows.
+```{r}
+nrow(df_hourly_intensities_merged)
+```
+Remove duplicate rows, if any, and check for number of rows.
+```{r}
+df_hourly_intensities_merged <- distinct(df_hourly_intensities_merged)
+nrow(df_hourly_intensities_merged)
+```
+Check for missing values
+```{r}
+colSums(is.na(df_hourly_intensities_merged))
+```
+
+Save cleaned data
+```{r}
+write.csv(df_hourly_intensities_merged,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_hourly_intensities_clean.csv', row.names = TRUE)
+```
+
+
+### Cleaning: hourlySteps_merged.csv
+
+##### Check for data types #####
+```{r}
+df_hourly_steps_merged <- read_csv('raw-data/hourlySteps_merged.csv')
+str(df_hourly_steps_merged)
+```
+
+Convert ActivityHour from character to date and time data type
+```{r}
+
+df_hourly_steps_merged$ActivityHour <- as.POSIXct(df_hourly_steps_merged$ActivityHour, 
+                                                     format = "%m/%d/%Y %I:%M:%S %p")
+
+str(df_hourly_steps_merged)
+```
+```{r}
+head(df_hourly_steps_merged$ActivityHour, 24)
+```
+
+
+##### Remove duplicate rows from hourlySteps_merged.csv #####
+Check for number of rows.
+```{r}
+nrow(df_hourly_steps_merged)
+```
+Remove duplicate rows, if any, and check for number of rows.
+```{r}
+df_hourly_steps_merged <- distinct(df_hourly_steps_merged)
+nrow(df_hourly_steps_merged)
+```
+Check for missing values
+```{r}
+colSums(is.na(df_hourly_steps_merged))
+```
+
+Save cleaned data
+```{r}
+write.csv(df_hourly_steps_merged,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_hourly_steps_clean.csv', row.names = TRUE)
+```
+
+
+### Cleaning: minuteMETsNarrow_merged.csv
+
+##### Check for data types #####
+```{r}
+df_minute_METs_merged <- read_csv('raw-data/minuteMETsNarrow_merged.csv')
+str(df_minute_METs_merged)
+```
+
+Convert ActivityMinute from character to date and time data type
+```{r}
+
+df_minute_METs_merged$ActivityMinute <- as.POSIXct(df_minute_METs_merged$ActivityMinute, 
+                                                     format = "%m/%d/%Y %I:%M:%S %p")
+
+str(df_minute_METs_merged)
+```
+```{r}
+head(df_minute_METs_merged$ActivityMinute, 24)
+```
+
+
+##### Remove duplicate rows from hourlySteps_merged.csv #####
+Check for number of rows.
+```{r}
+nrow(df_minute_METs_merged)
+```
+Remove duplicate rows, if any, and check for number of rows.
+```{r}
+df_minute_METs_merged <- distinct(df_minute_METs_merged)
+nrow(df_minute_METs_merged)
+```
+Check for missing values
+```{r}
+colSums(is.na(df_minute_METs_merged))
+```
+
+Save cleaned data
+```{r}
+write.csv(df_minute_METs_merged,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_minute_METs_clean.csv', row.names = TRUE)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
