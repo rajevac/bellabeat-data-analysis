@@ -1,12 +1,13 @@
 ---
-title: "bellabeat-data-analysis"
+title: "Bellabeat Data Analysis"
 author: "Vladimir Rajevac"
 date: "03/09/2021"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
-
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo=TRUE)
 ```
 
 # Background
@@ -36,4 +37,253 @@ This section identifies the primary stakeholder and the business question/proble
 * **Sando Mur**: Mathematician and Bellabeat’s cofounder; key member of the Bellabeat executive team
 
 ### Business Task
-Gain an understanding of how people use Fitbit smart devices and apply gained insights on one of the Bellabeat devices to make recommendations that may help craft Bellabeat marketing strategy.
+Gain an understanding of how people use Fitbit smart devices and apply gained insights on one of the Bellabeat products to make recommendations that may help craft Bellabeat marketing strategy and grow the business.
+
+# Prepare
+For the analysis, we'll use [FitBit Fitness Tracker Data](https://www.kaggle.com/arashnic/fitbit) available at Kaggle by [Mobius](https://www.kaggle.com/arashnic). This data set is in the public domain. The data set contains personal tracker data collected from thirty FitBit users, including minute-level output for physical activity, heart rate, and sleep monitoring.
+
+This section will explore FitBit data set, check how data is organized, and confirm its validity.
+
+Install dependencies `tideverse` and `ggplot2`
+```{r results="hide"}
+install.packages('tidyverse')
+install.packages('ggplot2')
+library(tidyverse)
+library(ggplot2)
+```
+
+### Explore Data Set
+
+##### Data set: dailyActivity_merged.csv
+```{r}
+df_daily_activity_merged <- read_csv('raw-data/dailyActivity_merged.csv')
+head(df_daily_activity_merged)
+```
+
+```{r}
+str(df_daily_activity_merged)
+```
+
+```{r}
+length(unique(df_daily_activity_merged$Id))
+```
+##### Data set: dailyCalories_merged.csv
+This data set is part of `df_daily_activity_merged` data frame.
+```{r}
+df_daily_calories_merged <- read_csv('raw-data/dailyCalories_merged.csv')
+head(df_daily_calories_merged)
+```
+
+```{r}
+str(df_daily_calories_merged)
+```
+
+```{r}
+length(unique(df_daily_calories_merged$Id))
+```
+##### Data set: dailyIntensities_merged.csv
+This data set is part of `df_daily_activity_merged` data frame.
+```{r}
+df_daily_intensities_merged <- read_csv('raw-data/dailyIntensities_merged.csv')
+head(df_daily_intensities_merged)
+```
+```{r}
+str(df_daily_intensities_merged)
+```
+
+```{r}
+length(unique(df_daily_intensities_merged$Id))
+```
+##### Data set: dailySteps_merged.csv
+This data set is part of `df_daily_activity_merged` data frame. However, the number of daily steps might help find a relationship with other variables such as calories and METs.
+```{r}
+df_daily_steps_merged <- read_csv('raw-data/dailySteps_merged.csv')
+head(df_daily_steps_merged)
+```
+```{r}
+length(unique(df_daily_steps_merged$Id))
+```
+##### Data set: heartrate_seconds_merged.csv
+We have heart rates from 14 of 33 unique FitBit users. The data is not part of the `df_daily_activity_merged` data frame.
+
+```{r}
+df_heartrate_seconds_merged <- read_csv('raw-data/heartrate_seconds_merged.csv')
+head(df_heartrate_seconds_merged)
+```
+```{r}
+str(df_heartrate_seconds_merged)
+```
+
+```{r}
+length(unique(df_heartrate_seconds_merged$Id))
+```
+
+##### Data set: hourlyCalories_merged.csv
+`hourlyCalories_merged.csv` might be used to understand at what time of the day users had the most intense training/activity.
+
+```{r}
+df_hourly_calories_merged <- read_csv('raw-data/hourlyCalories_merged.csv')
+head(df_hourly_calories_merged)
+```
+```{r}
+length(unique(df_hourly_calories_merged$Id))
+```
+```{r}
+summary(df_hourly_calories_merged$Calories)
+```
+
+##### Data set: hourlyIntensities_merged.csv
+It is not clear what `TotalIntensity` and `AverageIntensity` values represent. Since we shouldn't make the assumption, those variables shouldn't be used in the analysis. More information is needed to clarify this.
+
+
+```{r}
+df_hourly_intensities_merged <- read_csv('raw-data/hourlyIntensities_merged.csv')
+head(df_hourly_intensities_merged)
+```
+```{r}
+str(df_hourly_intensities_merged)
+```
+```{r}
+unique(df_hourly_intensities_merged$TotalIntensity)
+```
+```{r}
+unique(df_hourly_intensities_merged$AverageIntensity)
+```
+```{r}
+max(df_hourly_intensities_merged$AverageIntensity)
+min(df_hourly_intensities_merged$AverageIntensity)
+```
+
+
+##### Data set: hourlySteps_merged.csv
+`hourlySteps_merged.csv` might be merged with `hourlyCalories_merged.csv` to check for correlation between the number of steps and calories per hour.
+
+
+```{r}
+df_hourly_steps_merged <- read_csv('raw-data/hourlySteps_merged.csv')
+head(df_hourly_steps_merged)
+```
+
+```{r}
+length(unique(df_hourly_steps_merged$Id))
+summary(df_hourly_steps_merged$StepTotal)
+```
+##### Data set: sleepDay_merged.csv
+This data set summs up daily sleaping patterns and it might be useful to make a connection between sleep and phisical activity.
+
+```{r}
+df_sleep_day_merged <- read_csv('raw-data/sleepDay_merged.csv')
+head(df_sleep_day_merged)
+```
+```{r}
+str(df_sleep_day_merged)
+```
+
+##### Data set: weightLogInfo_merged.csv
+This data set might be used to find the correlation between sleep, daily activities, and weight loss.
+
+```{r}
+df_weight_merged <- read_csv('raw-data/weightLogInfo_merged.csv')
+head(df_weight_merged)
+```
+```{r}
+str(df_weight_merged)
+```
+
+
+
+### Data sets per minute observations
+Side by `minuteMETsNarrow_merged.csv` data set, all other per minute observations may not suit the data analysis. Hourly observations should be sufficient to discover top-level patterns on how people are using FitBit devices.
+
+##### Data set: minuteCaloriesNarrow_merged.csv
+
+```{r}
+df_minutes_calories_narrow_merged <- read_csv('raw-data/minuteCaloriesNarrow_merged.csv')
+head(df_minutes_calories_narrow_merged)
+```
+
+```{r}
+length(df_minutes_calories_narrow_merged$Id)
+```
+
+##### Data set: minuteCaloriesWide_merged.csv
+
+```{r}
+df_minutes_calories_wide_merged <- read_csv('raw-data/minuteCaloriesWide_merged.csv')
+head(df_minutes_calories_wide_merged)
+```
+
+##### Data set: minuteIntensityNarrow_merged.csv
+As with "hourlyIntensities_merged.csv" data set, it is not clear what Intensity means, and we should not make any assumptions, so this data set shouldn't be used.
+
+```{r}
+df_minutes_intensities_narrow_merged <- read_csv('raw-data/minuteIntensitiesNarrow_merged.csv')
+head(df_minutes_intensities_narrow_merged)
+```
+
+```{r}
+unique(df_minutes_intensities_narrow_merged$Intensity)
+```
+
+##### Data set: minuteIntensityWide_merged.csv
+As with "hourlyIntensities_merged.csv" data set, it is not clear what Intensity means, and we should not make any assumptions, so this data set shouldn't be used.
+
+```{r}
+df_minutes_intensities_wide_merged <- read_csv('raw-data/minuteIntensitiesWide_merged.csv')
+head(df_minutes_intensities_wide_merged)
+```
+
+##### Data set: minuteMETsNarrow_merged.csv
+According to some information available at [Healthline](https://www.healthline.com/health/what-are-mets#definition) "One MET is the energy you spend sitting at rest — your resting or basal metabolic rate. So, an activity with a MET value of 4 means you’re exerting four times the energy than you would if you were sitting still.To put it in perspective, a brisk walk at 3 or 4 miles per hour has a value of 4 METs. Jumping rope, which is a more vigorous activity, has a MET value of 12.3."
+
+This data set might be used to track the most active times of the day, and it can be combined with hourly steps and hourly calories data sets.
+
+```{r}
+df_minutes_METs_narrow_merged <- read_csv('raw-data/minuteMETsNarrow_merged.csv')
+head(df_minutes_METs_narrow_merged)
+```
+```{r}
+unique(df_minutes_METs_narrow_merged$METs)
+summary(df_minutes_METs_narrow_merged$METs)
+```
+##### Data set: minuteSleep_merged.csv
+It is not clear what is the meaning of the `value` in the data set. More information is needed to use this data set.
+
+```{r}
+df_minutes_sleep_merged <- read_csv('raw-data/minuteSleep_merged.csv')
+head(df_minutes_sleep_merged)
+```
+```{r}
+unique(df_minutes_sleep_merged$value)
+```
+##### Data set: minuteStepsNarrow_merged.csv
+
+```{r}
+df_minutes_sleeps_narrow_merged <- read_csv('raw-data/minuteStepsNarrow_merged.csv')
+head(df_minutes_sleeps_narrow_merged)
+```
+
+##### Data set: minuteStepsWide_merged.csv
+
+```{r}
+df_minutes_sleeps_wide_merged <- read_csv('raw-data/minuteStepsWide_merged.csv')
+head(df_minutes_sleeps_wide_merged)
+```
+### Data set to use for the analysis
+* dailyActivity_merged.csv
+* hourlyCalories_merged.csv
+* hourlyIntensities_merged.csv
+* hourlySteps_merged.csv
+* sleepDay_merged.csv
+* weightLogInfo_merged.csv
+* minuteMETsNarrow_merged.csv
+
+###### Recommendations: ######
+* Merge `sleepDay_merged.csv` with `dailyActivity_merged.csv`.
+* Transform `minuteMETsNarrow_merged.csv` into per hour and per day observation and merge data set with per hour observations (`hourlyCalories_merged.csv`, `hourlyIntensities_merged.csv`, `hourlySteps_merged.csv`) and per day observations `dailyActivity_merged.csv`.
+* Merge `weightLogInfo_merged.csv` with `dailyActivity_merged.csv`.
+
+###### Data Validation and Limitations ######
+It is not clear what was the criteria when collecting [FitBit Fitness Tracker Data](https://www.kaggle.com/arashnic/fitbit), how 33 observations are selected, and is the sample true representation of the population. One important thing to note is that Bellabeat customers are all female, and the FitBit data set doesn't make a distinction between male and female.
+
+# Process
