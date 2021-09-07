@@ -236,7 +236,7 @@ head(df_minutes_intensities_wide_merged)
 ##### Data set: minuteMETsNarrow_merged.csv
 According to some information available at [Healthline](https://www.healthline.com/health/what-are-mets#definition) "One MET is the energy you spend sitting at rest — your resting or basal metabolic rate. So, an activity with a MET value of 4 means you’re exerting four times the energy than you would if you were sitting still.To put it in perspective, a brisk walk at 3 or 4 miles per hour has a value of 4 METs. Jumping rope, which is a more vigorous activity, has a MET value of 12.3."
 
-This data set might be used to track the most active times of the day, and it can be combined with hourly steps and hourly calories data sets.
+While this data set might be used to track the most active times of the day, we can achieve the same by looking at hourly calories, intensities and steps.
 
 ```{r}
 df_minutes_METs_narrow_merged <- read_csv('raw-data/minuteMETsNarrow_merged.csv')
@@ -276,11 +276,10 @@ head(df_minutes_sleeps_wide_merged)
 * hourlySteps_merged.csv
 * sleepDay_merged.csv
 * weightLogInfo_merged.csv
-* minuteMETsNarrow_merged.csv
 
 ###### Recommendations: ######
 * Merge `sleepDay_merged.csv` with `dailyActivity_merged.csv`.
-* Transform `minuteMETsNarrow_merged.csv` into per hour and per day observation and merge data set with per hour observations (`hourlyCalories_merged.csv`, `hourlyIntensities_merged.csv`, `hourlySteps_merged.csv`) and per day observations `dailyActivity_merged.csv`.
+* Merge `hourlyCalories_merged.csv`, `hourlyIntensities_merged.csv`, and `hourlySteps_merged.csv`.
 * Merge `weightLogInfo_merged.csv` with `dailyActivity_merged.csv`.
 
 ###### Data Validation and Limitations ######
@@ -523,54 +522,11 @@ write.csv(df_hourly_steps_merged,'~/Learning/Data\ Analytics/Google\ Coursera\ D
 ```
 
 
-### Cleaning: minuteMETsNarrow_merged.csv
 
-##### Check for data types #####
-```{r}
-df_minute_METs_merged <- read_csv('raw-data/minuteMETsNarrow_merged.csv')
-str(df_minute_METs_merged)
-```
-
-Convert ActivityMinute from character to date and time data type
-```{r}
-
-df_minute_METs_merged$ActivityMinute <- as.POSIXct(df_minute_METs_merged$ActivityMinute, 
-                                                     format = "%m/%d/%Y %I:%M:%S %p")
-
-str(df_minute_METs_merged)
-```
-```{r}
-head(df_minute_METs_merged$ActivityMinute, 24)
-```
-
-
-##### Remove duplicate rows from hourlySteps_merged.csv #####
-Check for number of rows.
-```{r}
-nrow(df_minute_METs_merged)
-```
-Remove duplicate rows, if any, and check for number of rows.
-```{r}
-df_minute_METs_merged <- distinct(df_minute_METs_merged)
-nrow(df_minute_METs_merged)
-```
-Check for missing values
-```{r}
-colSums(is.na(df_minute_METs_merged))
-```
-
-Save cleaned data
-```{r}
-write.csv(df_minute_METs_merged,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_minute_METs_clean.csv', row.names = TRUE)
-```
-
-
-
-
-
-
-
-
+# Next up: #
+* Merge `df_sleep_day_clean.csv` with `df_daily_activity_clean.csv`.
+* Merge `df_hourly_calories_clean`, `df_hourly_intensities_clean.csv`, and `df_hourly_steps_clean.csv`.
+* Merge `df_weight_clean.csv` with `df_daily_activity_clean.csv`.
 
 
 
