@@ -25,7 +25,7 @@ This project is using the following data analysis steps:
 * Ask
 * Prepare
 * Process
-* Analize
+* Analyze
 * Share
 * Act
 
@@ -521,33 +521,101 @@ Save cleaned data
 write.csv(df_hourly_steps_merged,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_hourly_steps_clean.csv', row.names = TRUE)
 ```
 
+### Merge: `df_sleep_day_clean.csv` with `df_daily_activity_clean.csv`
 
+```{r}
+df_sleep_day_clean <- read_csv('clean-data/df_sleep_day_clean.csv')
+df_daily_activity_clean <- read_csv('clean-data/df_daily_activity_clean.csv')
+nrow(df_sleep_day_clean)
+nrow(df_daily_activity_clean)
+```
+
+There are 410 observations in `df_sleep_day_clean.csv` and 960 in `df_daily_activity_clean.csv` 
+```{r}
+colnames(df_sleep_day_clean)
+colnames(df_daily_activity_clean)
+```
+Rename SleepDay and ActiveDate columns to 'date'
+```{r}
+df_sleep_day_clean <- rename(df_sleep_day_clean, date = SleepDay)
+df_daily_activity_clean <- rename(df_daily_activity_clean, date = ActivityDate)
+colnames(df_sleep_day_clean)
+colnames(df_daily_activity_clean)
+```
+Merge data frames
+```{r}
+df_sleap_activity_day <- merge(df_sleep_day_clean, df_daily_activity_clean, by=c('Id', 'date'))
+nrow(sleap_activity_day)
+```
+Save data frame as .csv
+```{r}
+write.csv(df_sleap_activity_day,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_sleap_activity_day.csv', row.names = TRUE)
+```
+
+### Merge `df_hourly_calories_clean`, `df_hourly_intensities_clean.csv`, and `df_hourly_steps_clean.csv`.
+
+```{r}
+df_hourly_calories_clean <- read_csv('clean-data/df_hourly_calories_clean.csv')
+df_hourly_intensities_clean <- read_csv('clean-data/df_hourly_intensities_clean.csv')
+df_hourly_steps_clean <- read_csv('clean-data/df_hourly_steps_clean.csv')
+nrow(df_hourly_calories_clean)
+nrow(df_hourly_intensities_clean)
+nrow(df_hourly_steps_clean)
+```
+
+```{r}
+colnames(df_hourly_calories_clean)
+colnames(df_hourly_intensities_clean)
+colnames(df_hourly_steps_clean)
+```
+
+Merge data frames
+```{r}
+df_activity_hourly <- merge(df_hourly_calories_clean, df_hourly_intensities_clean, by=c('Id', 'ActivityHour'))
+df_activity_hourly <- merge(df_activity_hourly, df_hourly_steps_clean, by=c('Id', 'ActivityHour'))
+head(df_activity_hourly)
+```
+Save data frame as .csv
+```{r}
+write.csv(df_activity_hourly,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_activity_hourly.csv', row.names = TRUE)
+```
+
+### Merge: `df_weight_clean.csv` with `df_daily_activity_clean.csv`
+```{r}
+df_weight_clean <- read_csv('clean-data/df_weight_clean.csv')
+df_daily_activity_clean <- read_csv('clean-data/df_daily_activity_clean.csv')
+nrow(df_weight_clean)
+nrow(df_daily_activity_clean)
+```
+
+There are 67 observations in `df_weight_clean.csv` and 960 in `df_daily_activity_clean.csv` 
+```{r}
+colnames(df_weight_clean)
+colnames(df_daily_activity_clean)
+```
+Rename ActivityDate column in `df_daily_activity_clean.csv` to 'date'
+```{r}
+df_daily_activity_clean <- rename(df_daily_activity_clean, Date = ActivityDate)
+colnames(df_daily_activity_clean)
+```
+Merge data frames
+```{r}
+df_weight_activity_day <- merge(df_weight_clean, df_daily_activity_clean, by=c('Id', 'Date'))
+nrow(sleap_activity_day)
+head(sleap_activity_day)
+```
+Save data frame as .csv
+```{r}
+write.csv(df_weight_activity_day,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_weight_activity_day.csv', row.names = TRUE)
+```
+
+# Analyze
+For the purpose of analysis we'll use three data sets: `df_activity_hourly.csv`, `df_sleap_activity_day.csv`, and `df_weight_activity_day.csv`.
 
 # Next up: #
-* Merge `df_sleep_day_clean.csv` with `df_daily_activity_clean.csv`.
-* Merge `df_hourly_calories_clean`, `df_hourly_intensities_clean.csv`, and `df_hourly_steps_clean.csv`.
-* Merge `df_weight_clean.csv` with `df_daily_activity_clean.csv`.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+* Analyze `df_activity_hourly.csv`
+* Analyze  `df_sleap_activity_day.csv`
+* Analyze  `df_weight_activity_day.csv`
 
 
 
