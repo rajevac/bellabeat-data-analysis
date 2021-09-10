@@ -548,7 +548,7 @@ nrow(sleap_activity_day)
 ```
 Save data frame as .csv
 ```{r}
-write.csv(df_sleap_activity_day,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_sleap_activity_day.csv', row.names = TRUE)
+write.csv(df_sleap_activity_day,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_sleep_activity_day.csv', row.names = TRUE)
 ```
 
 ### Merge `df_hourly_calories_clean`, `df_hourly_intensities_clean.csv`, and `df_hourly_steps_clean.csv`.

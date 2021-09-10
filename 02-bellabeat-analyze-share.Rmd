@@ -10,17 +10,113 @@ output:
 knitr::opts_chunk$set(echo=TRUE)
 ```
 
-
 # Analyze
 For the purpose of analysis we'll use three data sets: `df_activity_hourly.csv`, `df_sleap_activity_day.csv`, and `df_weight_activity_day.csv`.
 
+Import packages
+```{r results="hide"}
+install.packages('tidyverse')
+install.packages('ggplot2')
+library(tidyverse)
+library(ggplot2)
+```
+
+# Hourly Activity Analysis
+
+Import data set
+```{r}
+df_activity_hourly <- read.csv("clean-data/df_activity_hourly.csv")
+head(df_activity_hourly)
+```
+
+Identify columns
+```{r}
+colnames(df_activity_hourly)
+```
+Drop index columns since we'll not need them
+```{r}
+df_activity_hourly <- subset(df_activity_hourly, select=c(Id,ActivityHour,Calories,TotalIntensity, AverageIntensity, StepTotal))
+head(df_activity_hourly)
+```
+
+### At what time of the day people are most active?
+
+Check for number of unique observations
+```{r}
+length(unique(df_activity_hourly$Id))
+```
+
+Split date and time
+```{r}
+df_activity_hourly <- separate(df_activity_hourly, ActivityHour, c('Date', 'Hour'), sep = ' ', remove = FALSE, convert = FALSE)
+head(df_activity_hourly)
+```
+
+Is there a most popular time of the day when people choose to exercise? We are making assumption that higher Total Intensity can revile the most popular time of the day.
+
+Looking at the plot below we cannot find a clear patter, except that between midnight and 5am people are less active, which is normal since this is the time of he day when majority of people are sleeping.
+
+```{r}
+ggplot(data=df_activity_hourly, aes(x=Hour, y=TotalIntensity)) + geom_point() + theme(axis.text.x = element_text(angle = 90)) 
+```
+
+### How intense activity needs to be to burn the most calories?
+```{r}
+ggplot(data=df_activity_hourly, aes(x=TotalIntensity, y=Calories)) + geom_point(color='deepskyblue3') + geom_smooth(color='deeppink4') + theme(axis.text.x = element_text(angle = 90)) 
+```
+
+There is very high positive correlation (0.8966161) between Total Intensity and Calories. The more intense activity is the more calories people burn.
+```{r}
+cor(df_activity_hourly$TotalIntensity, df_activity_hourly$Calories)
+```
+
+```{r}
+ggplot(data=df_activity_hourly, aes(x=StepTotal, y=Calories)) + geom_point(color='deepskyblue3') + geom_smooth(color='deeppink4') + theme(axis.text.x = element_text(angle = 90))
+```
+
+There is very high positive correlation (0.814968) between Total Steps and Calories. The more steps people make the the more calories they burn.
+```{r}
+cor(df_activity_hourly$StepTotal, df_activity_hourly$Calories)
+```
+### How many calories people burn in sedatery state?
+In average people burn 69 calories per hour in sedater state, however this number varies from minimum 42 to maximum 101 calories, and standard deviation of 13.2.
+```{r}
+df_sedatery_calories <- subset(df_activity_hourly, df_activity_hourly$TotalIntensity == 0, select=c(Calories))
+summary(df_sedatery_calories$Calories)
+sd(df_sedatery_calories$Calories)
+```
+
+# Sleap Analysis
+
+Import data set
+```{r}
+df_sleep_activity <- read.csv("clean-data/df_sleep_activity_day.csv")
+head(df_sleep_activity)
+```
+
+Identify columns
+```{r}
+colnames(df_sleep_activity)
+```
+Check for number of unique observations
+```{r}
+length(unique(df_sleep_activity$Id))
+```
+**Note:** We have sleep data for 24 of 33 unique observations.
+
+### Does more active lifestyle affects speep?
+
+
+
+
 # Next up: #
-* Analyze `df_activity_hourly.csv`
-* Analyze  `df_sleap_activity_day.csv`
 * Analyze  `df_weight_activity_day.csv`
 
 
-
+Summarize data
+```{r}
+summary(subset(df_activity_hourly, select=c(Calories,TotalIntensity, AverageIntensity, StepTotal)))
+```
 
 
 
