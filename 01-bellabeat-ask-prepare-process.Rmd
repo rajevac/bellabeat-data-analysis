@@ -1,5 +1,5 @@
 ---
-title: "Bellabeat Data Analysis"
+title: "Bellabeat Data Analysis: Part 1 - Ask, Prepare and Process"
 author: "Vladimir Rajevac"
 date: "03/09/2021"
 output:
@@ -27,7 +27,6 @@ This project is using the following data analysis steps:
 * Process
 * Analyze
 * Share
-* Act
 
 # Ask
 This section identifies the primary stakeholder and the business question/problem this data analysis will try to answer/offer a solution.
@@ -609,13 +608,6 @@ Save data frame as .csv
 write.csv(df_weight_activity_day,'~/Learning/Data\ Analytics/Google\ Coursera\ Data\ Analytics\ Course/7_Capstone/bellabeat-data-analysis/clean-data/df_weight_activity_day.csv', row.names = TRUE)
 ```
 
-# Analyze
-For the purpose of analysis we'll use three data sets: `df_activity_hourly.csv`, `df_sleap_activity_day.csv`, and `df_weight_activity_day.csv`.
-
-# Next up: #
-* Analyze `df_activity_hourly.csv`
-* Analyze  `df_sleap_activity_day.csv`
-* Analyze  `df_weight_activity_day.csv`
 
 
 

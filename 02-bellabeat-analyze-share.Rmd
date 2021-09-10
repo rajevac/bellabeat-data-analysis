@@ -1,0 +1,35 @@
+---
+title: "Bellabeat Data Analysis: Part 2 - Analyze and Share"
+author: "Vladimir Rajevac"
+date: "03/09/2021"
+output:
+  html_document: default
+  pdf_document: default
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE)
+```
+
+
+# Analyze
+For the purpose of analysis we'll use three data sets: `df_activity_hourly.csv`, `df_sleap_activity_day.csv`, and `df_weight_activity_day.csv`.
+
+# Next up: #
+* Analyze `df_activity_hourly.csv`
+* Analyze  `df_sleap_activity_day.csv`
+* Analyze  `df_weight_activity_day.csv`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
