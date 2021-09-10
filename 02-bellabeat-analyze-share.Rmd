@@ -54,7 +54,7 @@ head(df_activity_hourly)
 
 Is there a most popular time of the day when people choose to exercise? We are making assumption that higher Total Intensity can revile the most popular time of the day.
 
-Looking at the plot below we cannot find a clear patter, except that between midnight and 5am people are less active, which is normal since this is the time of he day when majority of people are sleeping.
+Looking at the plot below we cannot find a clear pattern, except that between midnight and 5am people are less active, which is normal since this is the time of he day when majority of people are sleeping.
 
 ```{r}
 ggplot(data=df_activity_hourly, aes(x=Hour, y=TotalIntensity)) + geom_point() + theme(axis.text.x = element_text(angle = 90)) 
@@ -104,24 +104,68 @@ length(unique(df_sleep_activity$Id))
 ```
 **Note:** We have sleep data for 24 of 33 unique observations.
 
-### Does more active lifestyle affects speep?
+### Does more active lifestyle or time spent in bed affects sleep?
 
-
-
-
-# Next up: #
-* Analyze  `df_weight_activity_day.csv`
-
-
-Summarize data
+Let's compare `TotalMinutesAsleep` and `TotalTimeInBed`. There is very strong correlation (0.93) between time spent in bed and time a sleep.
 ```{r}
-summary(subset(df_activity_hourly, select=c(Calories,TotalIntensity, AverageIntensity, StepTotal)))
+ggplot(data=df_sleep_activity, aes(x=TotalMinutesAsleep, y=TotalTimeInBed)) + geom_point(color='deepskyblue3') + geom_smooth(color='deeppink4') + theme(axis.text.x = element_text(angle = 90))
+cor(df_sleep_activity$TotalMinutesAsleep, df_sleep_activity$TotalTimeInBed)
+```
+
+Calories burnt and sleep time are not correlated with very week negative correlation of -0.03.
+```{r}
+ggplot(data=df_sleep_activity, aes(x=TotalMinutesAsleep, y=Calories)) + geom_point(color='deepskyblue3') + geom_smooth(color='deeppink4') + theme(axis.text.x = element_text(angle = 90))
+cor(df_sleep_activity$TotalMinutesAsleep, df_sleep_activity$Calories)
+```
+
+```{r}
+ggplot(data=df_sleep_activity, aes(x=TotalMinutesAsleep, y=TotalDistance)) + geom_point(color='deepskyblue3') + geom_smooth(color='deeppink4') + theme(axis.text.x = element_text(angle = 90))
+cor(df_sleep_activity$TotalMinutesAsleep, df_sleep_activity$TotalDistance)
+```
+
+**Note:** Exercising doesn't affect sleep time. As per example below, analyzing sleep per user and how it relates to daily activities is not possible since we have way to many missing values. Most of the tracked their sleep less than 50% of observed time.
+
+```{r}
+df_sleep_time_per_user <- subset(df_sleep_activity, select=c(Id, date, TotalMinutesAsleep))
+df_sleep_time_per_user_wide <- reshape(df_sleep_time_per_user, idvar = "Id", timevar = "date", direction = "wide")
+summary(df_sleep_time_per_user_wide)
 ```
 
 
+# Weight Analysis
+The sample is to small to make any conclusion about daily activities and weight. Only 8 useres tracked theri weigh.
+```{r}
+df_weight_activity <- read.csv("clean-data/df_weight_activity_day.csv")
+head(df_weight_activity)
+length(unique(df_weight_activity$Id))
+```
+
+# Daily Activity Analysis
+
+```{r}
+df_daily_activity <- read.csv("clean-data/df_daily_activity_clean.csv")
+head(df_daily_activity)
+length(unique(df_daily_activity$Id))
+colnames(df_daily_activity)
+```
+Majority of people are not very active during the day and spend 16.5 hours in sedentary state. When active, people spend more time on light activities then fairly or very active
+
+```{r}
+round(mean(df_daily_activity$SedentaryMinutes)/60, digits = 1)
+round(mean(df_daily_activity$VeryActiveMinutes)/60, digits = 1)
+round(mean(df_daily_activity$FairlyActiveMinutes)/60, digits = 1)
+round(mean(df_daily_activity$LightlyActiveMinutes)/60, digits = 1)
+```
 
 
+# Daily Activity Analysis
+It is very difficult to make recommendations with high certainty. This is mostly due to data set limitations. We do not know the gender of FitBit users which is very important for Bellabeat, since their main consumers are women. Also, tracking meals, quality of food, hydration and calories intake would help making recommendations relevant to type of exercise to choose for specific day and over all better health choices.
 
+However some conclusions can be made:
+* There is very strong correlation between activity intensity and calories. The more intense activity is to more calories people burn.
+* There is no correlations between sleep time and activity intensity. 
+* In average people burn 69 calories per hour in sedentary state. This might be use to make healthy choice food recommendation depending on how people are active during the day. So if you sit all day with no exercising you can not burn more than 1,100 calories in average.
+* People spend in average 16.5 hours in sedentary state. Perhaps developing device/app that can motivate people to be more active is definitely something to explore and maybe introduce as a new feature Bellabeat devices my offer.
 
 
 
