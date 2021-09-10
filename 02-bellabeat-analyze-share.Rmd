@@ -158,7 +158,7 @@ round(mean(df_daily_activity$LightlyActiveMinutes)/60, digits = 1)
 ```
 
 
-# Daily Activity Analysis
+# Share (Conclusion)
 It is very difficult to make recommendations with high certainty. This is mostly due to data set limitations. We do not know the gender of FitBit users which is very important for Bellabeat, since their main consumers are women. Also, tracking meals, quality of food, hydration and calories intake would help making recommendations relevant to type of exercise to choose for specific day and over all better health choices.
 
 However some conclusions can be made:
